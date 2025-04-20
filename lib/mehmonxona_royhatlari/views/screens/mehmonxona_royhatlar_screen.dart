@@ -115,7 +115,19 @@ class _MehmonxonaRoyhatlarScreenState extends State<MehmonxonaRoyhatlarScreen> {
                                     .toList(),
                           ),
                           SizedBox(height: 12),
-
+                          Container(
+                            width: double.infinity,
+                            height: 200,
+                            decoration: BoxDecoration(
+                              borderRadius: BorderRadius.circular(10),
+                              image: DecorationImage(
+                                image: NetworkImage(
+                                  'https://img1.hscicdn.com/image/upload/f_auto,t_ds_w_1280,q_80/lsci/db/PICTURES/CMS/126700/126753.jpg',
+                                ),
+                                fit: BoxFit.cover,
+                              ),
+                            ),
+                          ),
                           Text(
                             'Sharhlar:',
                             style: TextStyle(fontWeight: FontWeight.bold),
@@ -178,7 +190,13 @@ class _MehmonxonaRoyhatlarScreenState extends State<MehmonxonaRoyhatlarScreen> {
                           ),
 
                           SizedBox(height: 8),
-                          ElevatedButton(
+                          TextButton(
+                            style: TextButton.styleFrom(
+                              backgroundColor: Colors.blueAccent,
+                              shape: RoundedRectangleBorder(
+                                borderRadius: BorderRadius.circular(10),
+                              ),
+                            ),
                             onPressed: () async {
                               if (commentController.text.isNotEmpty &&
                                   chooseRating > 0) {
@@ -202,7 +220,14 @@ class _MehmonxonaRoyhatlarScreenState extends State<MehmonxonaRoyhatlarScreen> {
                                 });
                               }
                             },
-                            child: Text("Sharhni yuborish"),
+                            child: Text(
+                              "Sharhni yuborish",
+                              style: TextStyle(
+                                fontWeight: FontWeight.bold,
+                                color: Colors.white,
+                                letterSpacing: 2,
+                              ),
+                            ),
                           ),
                         ],
                       ),
