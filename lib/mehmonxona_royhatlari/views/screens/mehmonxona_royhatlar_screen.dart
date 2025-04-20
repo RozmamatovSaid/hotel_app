@@ -12,9 +12,10 @@ class MehmonxonaRoyhatlarScreen extends StatefulWidget {
 
 class _MehmonxonaRoyhatlarScreenState extends State<MehmonxonaRoyhatlarScreen> {
   final HotelController controller = HotelController();
-
-  int chooseRating = 0;
   final TextEditingController commentController = TextEditingController();
+
+  Map<String, bool> reviewedHotels = {};
+  int chooseRating = 0;
 
   @override
   void initState() {
@@ -22,6 +23,7 @@ class _MehmonxonaRoyhatlarScreenState extends State<MehmonxonaRoyhatlarScreen> {
     controller.fetchHotels().then((_) {
       setState(() {});
     });
+    loadReviewStatus();
   }
 
   @override
@@ -29,21 +31,23 @@ class _MehmonxonaRoyhatlarScreenState extends State<MehmonxonaRoyhatlarScreen> {
     final hotels = controller.getAllHotels();
 
     return Scaffold(
-      appBar: AppBar(title: Text("Mehmonxonalar"), centerTitle: true),
+      appBar: AppBar(title: const Text("Mehmonxonalar"), centerTitle: true),
       body:
           hotels.isEmpty
-              ? Center(child: CircularProgressIndicator())
+              ? const Center(child: CircularProgressIndicator())
               : ListView.builder(
-                padding: EdgeInsets.all(12),
+                padding: const EdgeInsets.all(12),
                 itemCount: hotels.length,
                 itemBuilder: (context, index) {
                   final hotel = hotels[index];
+                  final hasReviewed = reviewedHotels[hotel.id] ?? false;
+
                   return Card(
                     shape: RoundedRectangleBorder(
                       borderRadius: BorderRadius.circular(16),
                     ),
                     child: Padding(
-                      padding: EdgeInsets.all(12.0),
+                      padding: const EdgeInsets.all(12.0),
                       child: Column(
                         crossAxisAlignment: CrossAxisAlignment.start,
                         children: [
@@ -52,14 +56,14 @@ class _MehmonxonaRoyhatlarScreenState extends State<MehmonxonaRoyhatlarScreen> {
                             child: ListView.builder(
                               scrollDirection: Axis.horizontal,
                               itemCount: hotel.image.length,
-                              itemBuilder: (context, index) {
+                              itemBuilder: (context, i) {
                                 return Container(
-                                  margin: EdgeInsets.only(right: 8),
+                                  margin: const EdgeInsets.only(right: 8),
                                   width: 280,
                                   decoration: BoxDecoration(
                                     borderRadius: BorderRadius.circular(12),
                                     image: DecorationImage(
-                                      image: NetworkImage(hotel.image[index]),
+                                      image: NetworkImage(hotel.image[i]),
                                       fit: BoxFit.cover,
                                     ),
                                   ),
@@ -67,41 +71,41 @@ class _MehmonxonaRoyhatlarScreenState extends State<MehmonxonaRoyhatlarScreen> {
                               },
                             ),
                           ),
-                          SizedBox(height: 12),
+
+                          const SizedBox(height: 12),
                           Text(
                             hotel.name,
-                            style: TextStyle(
+                            style: const TextStyle(
                               fontSize: 20,
                               fontWeight: FontWeight.bold,
                             ),
                           ),
                           Text(
                             hotel.description,
-                            style: TextStyle(fontWeight: FontWeight.w700),
+                            style: const TextStyle(fontWeight: FontWeight.w700),
                           ),
-                          SizedBox(height: 8),
+                          const SizedBox(height: 8),
                           Text(
                             'Narxi: \$${hotel.price}',
-                            style: TextStyle(
+                            style: const TextStyle(
                               color: Colors.green,
                               fontWeight: FontWeight.w700,
                             ),
                           ),
                           Text(
                             'Reyting: ${hotel.rating}',
-                            style: TextStyle(fontWeight: FontWeight.w700),
+                            style: const TextStyle(fontWeight: FontWeight.w700),
                           ),
-                          SizedBox(height: 8),
 
+                          const SizedBox(height: 8),
                           Wrap(
                             spacing: 8,
                             children:
                                 hotel.type
-                                    .map((text) => Chip(label: Text(text)))
+                                    .map((t) => Chip(label: Text(t)))
                                     .toList(),
                           ),
-                          SizedBox(height: 8),
-
+                          const SizedBox(height: 8),
                           Wrap(
                             spacing: 8,
                             children:
@@ -114,21 +118,9 @@ class _MehmonxonaRoyhatlarScreenState extends State<MehmonxonaRoyhatlarScreen> {
                                     )
                                     .toList(),
                           ),
-                          SizedBox(height: 12),
-                          Container(
-                            width: double.infinity,
-                            height: 200,
-                            decoration: BoxDecoration(
-                              borderRadius: BorderRadius.circular(10),
-                              image: DecorationImage(
-                                image: NetworkImage(
-                                  'https://img1.hscicdn.com/image/upload/f_auto,t_ds_w_1280,q_80/lsci/db/PICTURES/CMS/126700/126753.jpg',
-                                ),
-                                fit: BoxFit.cover,
-                              ),
-                            ),
-                          ),
-                          Text(
+
+                          const SizedBox(height: 12),
+                          const Text(
                             'Sharhlar:',
                             style: TextStyle(fontWeight: FontWeight.bold),
                           ),
@@ -140,7 +132,7 @@ class _MehmonxonaRoyhatlarScreenState extends State<MehmonxonaRoyhatlarScreen> {
                                     title: Text(r.comment),
                                     subtitle: Row(
                                       children: List.generate(5, (i) {
-                                        int starValue = i + 1;
+                                        final starValue = i + 1;
                                         return Icon(
                                           r.rating >= starValue
                                               ? Icons.star
@@ -155,80 +147,88 @@ class _MehmonxonaRoyhatlarScreenState extends State<MehmonxonaRoyhatlarScreen> {
                                   );
                                 }).toList(),
                           ),
+                          const Divider(),
 
-                          Divider(),
-
-                          Text(
-                            "Sharh yozish:",
-                            style: TextStyle(fontWeight: FontWeight.bold),
-                          ),
-                          TextField(
-                            controller: commentController,
-                            decoration: InputDecoration(
-                              hintText: "Fikringizni yozing...",
+                          if (!hasReviewed) ...[
+                            const Text(
+                              "Sharh yozish:",
+                              style: TextStyle(fontWeight: FontWeight.bold),
                             ),
-                          ),
-                          SizedBox(height: 8),
-
-                          Row(
-                            children: List.generate(5, (index) {
-                              int value = (index + 1);
-                              return GestureDetector(
-                                onTap: () {
-                                  setState(() {
-                                    chooseRating = value;
-                                  });
-                                },
-                                child: Icon(
-                                  chooseRating >= value
-                                      ? Icons.star
-                                      : Icons.star_border,
-                                  color: Colors.amber,
-                                ),
-                              );
-                            }),
-                          ),
-
-                          SizedBox(height: 8),
-                          TextButton(
-                            style: TextButton.styleFrom(
-                              backgroundColor: Colors.blueAccent,
-                              shape: RoundedRectangleBorder(
-                                borderRadius: BorderRadius.circular(10),
+                            TextField(
+                              controller: commentController,
+                              decoration: const InputDecoration(
+                                hintText: "Fikringizni yozing...",
                               ),
                             ),
-                            onPressed: () async {
-                              if (commentController.text.isNotEmpty &&
-                                  chooseRating > 0) {
-                                final newComment = commentController.text;
-
-                                await controller.addReview(
-                                  hotel.id,
-                                  newComment,
-                                  chooseRating,
+                            const SizedBox(height: 8),
+                            Row(
+                              children: List.generate(5, (i) {
+                                final value = i + 1;
+                                return GestureDetector(
+                                  onTap: () {
+                                    setState(() {
+                                      chooseRating = value;
+                                    });
+                                  },
+                                  child: Icon(
+                                    chooseRating >= value
+                                        ? Icons.star
+                                        : Icons.star_border,
+                                    color: Colors.amber,
+                                  ),
                                 );
+                              }),
+                            ),
+                            const SizedBox(height: 8),
+                            TextButton(
+                              style: TextButton.styleFrom(
+                                backgroundColor: Colors.blueAccent,
+                                shape: RoundedRectangleBorder(
+                                  borderRadius: BorderRadius.circular(10),
+                                ),
+                              ),
+                              onPressed: () async {
+                                if (commentController.text.isNotEmpty &&
+                                    chooseRating > 0) {
+                                  final newComment = commentController.text;
 
-                                setState(() {
-                                  hotel.reviews.add(
-                                    Review(
-                                      comment: newComment,
-                                      rating: chooseRating,
-                                    ),
+                                  await controller.addReview(
+                                    hotel.id,
+                                    newComment,
+                                    chooseRating,
                                   );
-                                  commentController.clear();
-                                  chooseRating = 0;
-                                });
-                              }
-                            },
-                            child: Text(
-                              "Sharhni yuborish",
-                              style: TextStyle(
-                                fontWeight: FontWeight.bold,
-                                color: Colors.white,
-                                letterSpacing: 2,
+
+                                  await markHotelAsReviewed(hotel.id);
+
+                                  setState(() {
+                                    hotel.reviews.add(
+                                      Review(
+                                        comment: newComment,
+                                        rating: chooseRating,
+                                      ),
+                                    );
+                                    commentController.clear();
+                                    chooseRating = 0;
+                                  });
+                                }
+                              },
+                              child: const Text(
+                                "Sharhni yuborish",
+                                style: TextStyle(
+                                  fontWeight: FontWeight.bold,
+                                  color: Colors.white,
+                                  letterSpacing: 2,
+                                ),
                               ),
                             ),
-                          ),
+                          ] else
+                            const Text(
+                              "Siz bu mehmonxonaga allaqachon sharh yozgansiz.",
+                              style: TextStyle(
+                                color: Colors.grey,
+                                fontStyle: FontStyle.italic,
+                              ),
+                            ),
                         ],
                       ),
                     ),

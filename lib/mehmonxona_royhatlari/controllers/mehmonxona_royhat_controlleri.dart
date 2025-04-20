@@ -1,6 +1,7 @@
 import 'dart:convert';
 import 'package:hotel_app/mehmonxona_royhatlari/models/mehmonxona_royhati_model.dart';
 import 'package:http/http.dart' as http;
+import 'package:shared_preferences/shared_preferences.dart';
 
 class HotelController {
   List<Hotel> hotels = [];
@@ -38,4 +39,21 @@ class HotelController {
       body: json.encode({"comment": comment, "rating": rating}),
     );
   }
+}
+
+//! Shared Preferences
+Future<Map<String, bool>> loadReviewStatus() async {
+  final prefs = await SharedPreferences.getInstance();
+  final keys = prefs.getKeys();
+
+  Map<String, bool> reviewedHotels = {
+    for (var key in keys) key: prefs.getBool(key) ?? false,
+  };
+
+  return reviewedHotels;
+}
+
+Future<void> markHotelAsReviewed(String hotelId) async {
+  final prefs = await SharedPreferences.getInstance();
+  await prefs.setBool(hotelId, true);
 }
