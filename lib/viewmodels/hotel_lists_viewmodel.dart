@@ -1,9 +1,9 @@
 import 'dart:convert';
-import 'package:hotel_app/mehmonxona_royhatlari/models/mehmonxona_royhati_model.dart';
+import 'package:hotel_app/models/hotel_list_model.dart';
 import 'package:http/http.dart' as http;
 import 'package:shared_preferences/shared_preferences.dart';
 
-class HotelController {
+class HotelListsRemoteDatasource {
   List<Hotel> hotels = [];
 
   Future<void> fetchHotels() async {
