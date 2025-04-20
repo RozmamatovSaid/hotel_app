@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:hotel_app/models/profile_model.dart';
 import 'package:hotel_app/viewmodels/profile_viewmodel.dart';
+import 'package:hotel_app/views/profile/screens/screen.dart';
 import 'package:hotel_app/views/profile/widgets/line.dart';
 import 'package:hotel_app/views/profile/extension/space_extension.dart';
 import 'package:hotel_app/views/profile/widgets/log_out_textbotton.dart';
@@ -24,29 +25,35 @@ class ProfileScreen extends StatelessWidget {
             fontSize: 30,
           ),
         ),
+        actions: [
+          IconButton(
+            onPressed: () {
+              Navigator.push(
+                context,
+                MaterialPageRoute(builder: (context) => Screen()),
+              );
+            },
+            icon: Icon(Icons.abc),
+          ),
+        ],
       ),
-      body: FutureBuilder<List<ProfileModel>>(
+      body: FutureBuilder<ProfileModel?>(
         future: vievmodel.getUser(),
         builder: (context, snapshot) {
           if (snapshot.connectionState == ConnectionState.waiting) {
-            return Center(
-              child: CircularProgressIndicator(),
-            );
+            return Center(child: CircularProgressIndicator());
           }
 
           if (snapshot.hasError) {
-            return Center(
-              child: Text('Error: ${snapshot.error}'),
-            );
+            print(snapshot.stackTrace);
+            return Center(child: Text('Error: ${snapshot.error}'));
           }
 
-          if (snapshot.data == null || snapshot.data!.isEmpty) {
-            return Center(
-              child: Text('No data available'),
-            );
+          if (snapshot.data == null) {
+            return Center(child: Text('No data available'));
           }
-
-          final user = snapshot.data![0];
+          final user = snapshot.data!;
+          // final bottomSize = MediaQuery.of(context).viewInsets.bottom + 20;
 
           return Center(
             child: Container(
@@ -56,10 +63,7 @@ class ProfileScreen extends StatelessWidget {
                   children: [
                     Line(),
                     27.h,
-                    CircleAvatar(
-                      backgroundColor: Colors.amber,
-                      radius: 50,
-                    ),
+                    CircleAvatar(backgroundColor: Colors.amber, radius: 50),
                     15.h,
                     Text(
                       "${user.lastName} ${user.firstName}",
@@ -71,10 +75,7 @@ class ProfileScreen extends StatelessWidget {
                     ),
                     Text(
                       user.email,
-                      style: TextStyle(
-                        color: Colors.black,
-                        fontSize: 25,
-                      ),
+                      style: TextStyle(color: Colors.black, fontSize: 25),
                     ),
                     20.h,
                     Line(),
@@ -84,6 +85,7 @@ class ProfileScreen extends StatelessWidget {
                       title: "Akkount Sozlamalari",
                       onTap: () {
                         showModalBottomSheet(
+                          isScrollControlled: true,
                           context: context,
                           builder: (context) {
                             return Container(
@@ -91,7 +93,8 @@ class ProfileScreen extends StatelessWidget {
                               decoration: BoxDecoration(
                                 color: Colors.white,
                                 borderRadius: BorderRadius.vertical(
-                                    top: Radius.circular(25)),
+                                  top: Radius.circular(25),
+                                ),
                               ),
                               child: Padding(
                                 padding: const EdgeInsets.all(16),
@@ -103,94 +106,131 @@ class ProfileScreen extends StatelessWidget {
                                     Text(
                                       "Akkount sozlamalari: ",
                                       style: TextStyle(
-                                          fontWeight: FontWeight.bold,
-                                          fontSize: 20),
+                                        fontWeight: FontWeight.bold,
+                                        fontSize: 20,
+                                      ),
                                     ),
                                     RichTextWidget(
-                                        subtitle: "Ism", title: user.firstName),
+                                      subtitle: "Ism",
+                                      title: user.firstName,
+                                    ),
                                     RichTextWidget(
-                                        subtitle: "Familiya",
-                                        title: user.lastName),
+                                      subtitle: "Familiya",
+                                      title: user.lastName,
+                                    ),
                                     RichTextWidget(
-                                        subtitle: "Telefon raqam",
-                                        title: user.phoneNumber),
+                                      subtitle: "Telefon raqam",
+                                      title: user.phoneNumber,
+                                    ),
                                     RichTextWidget(
-                                        subtitle: "Jinsi", title: user.gender),
+                                      subtitle: "Jinsi",
+                                      title: user.gender,
+                                    ),
                                     RichTextWidget(
-                                        subtitle: "Tug'ilgan kun",
-                                        title: user.birthDate),
+                                      subtitle: "Tug'ilgan kun",
+                                      title: user.birthDate,
+                                    ),
                                     Align(
                                       alignment: Alignment(1, 1),
                                       child: FloatingActionButton(
                                         onPressed: () {
                                           showModalBottomSheet(
+                                            isScrollControlled: true,
                                             context: context,
                                             builder: (context) {
-                                              return Container(
-                                                width: double.infinity,
-                                                decoration: BoxDecoration(
-                                                  color: Colors.white,
-                                                  borderRadius:
-                                                      BorderRadius.vertical(
-                                                          top: Radius.circular(
-                                                              25)),
-                                                ),
+                                              return SingleChildScrollView(
                                                 child: Padding(
-                                                  padding:
-                                                      const EdgeInsets.all(16),
-                                                  child: Column(
-                                                    mainAxisSize:
-                                                        MainAxisSize.min,
-                                                    spacing: 10,
-                                                    crossAxisAlignment:
-                                                        CrossAxisAlignment
-                                                            .start,
-                                                    children: [
-                                                      Text("Taxrirlash"),
-                                                      TextField(
-                                                        decoration: InputDecoration(
-                                                            border:
-                                                                OutlineInputBorder(),
-                                                            hintText: "Ism"),
+                                                  padding: EdgeInsets.only(
+                                                    bottom:
+                                                        MediaQuery.of(
+                                                          context,
+                                                        ).viewInsets.bottom +
+                                                        20,
+                                                  ),
+                                                  child: Container(
+                                                    width: double.infinity,
+                                                    decoration: BoxDecoration(
+                                                      color: Colors.white,
+                                                      borderRadius:
+                                                          BorderRadius.vertical(
+                                                            top:
+                                                                Radius.circular(
+                                                                  25,
+                                                                ),
+                                                          ),
+                                                    ),
+                                                    child: Padding(
+                                                      padding:
+                                                          const EdgeInsets.all(
+                                                            16,
+                                                          ),
+                                                      child: Column(
+                                                        mainAxisSize:
+                                                            MainAxisSize.min,
+                                                        spacing: 10,
+                                                        crossAxisAlignment:
+                                                            CrossAxisAlignment
+                                                                .start,
+                                                        children: [
+                                                          Text("Taxrirlash"),
+                                                          TextField(
+                                                            decoration:
+                                                                InputDecoration(
+                                                                  border:
+                                                                      OutlineInputBorder(),
+                                                                  hintText:
+                                                                      "Ism",
+                                                                ),
+                                                          ),
+                                                          TextField(
+                                                            decoration:
+                                                                InputDecoration(
+                                                                  border:
+                                                                      OutlineInputBorder(),
+                                                                  hintText:
+                                                                      "Familiya",
+                                                                ),
+                                                          ),
+                                                          TextField(
+                                                            decoration: InputDecoration(
+                                                              border:
+                                                                  OutlineInputBorder(),
+                                                              hintText:
+                                                                  "Telefon raqam",
+                                                            ),
+                                                          ),
+                                                          TextField(
+                                                            decoration:
+                                                                InputDecoration(
+                                                                  border:
+                                                                      OutlineInputBorder(),
+                                                                  hintText:
+                                                                      "Jinsi",
+                                                                ),
+                                                          ),
+                                                          TextField(
+                                                            decoration: InputDecoration(
+                                                              border:
+                                                                  OutlineInputBorder(),
+                                                              hintText:
+                                                                  "Tug'ilgan kun",
+                                                            ),
+                                                          ),
+                                                          Align(
+                                                            alignment:
+                                                                Alignment(1, 1),
+                                                            child:
+                                                                FloatingActionButton(
+                                                                  onPressed:
+                                                                      () {},
+                                                                  child: Icon(
+                                                                    Icons.edit,
+                                                                  ),
+                                                                ),
+                                                          ),
+                                                        ],
                                                       ),
-                                                      TextField(
-                                                        decoration: InputDecoration(
-                                                            border:
-                                                                OutlineInputBorder(),
-                                                            hintText:
-                                                                "Familiya"),
-                                                      ),
-                                                      TextField(
-                                                        decoration: InputDecoration(
-                                                            border:
-                                                                OutlineInputBorder(),
-                                                            hintText:
-                                                                "Telefon raqam"),
-                                                      ),
-                                                      TextField(
-                                                        decoration: InputDecoration(
-                                                            border:
-                                                                OutlineInputBorder(),
-                                                            hintText: "Jinsi"),
-                                                      ),
-                                                      TextField(
-                                                        decoration: InputDecoration(
-                                                            border:
-                                                                OutlineInputBorder(),
-                                                            hintText:
-                                                                "Tug'ilgan kun"),
-                                                      ),
-                                                      Align(
-                                                        alignment:
-                                                            Alignment(1, 1),
-                                                        child:
-                                                            FloatingActionButton(
-                                                          onPressed: () {},
-                                                          child:
-                                                              Icon(Icons.edit),
-                                                        ),
-                                                      )
-                                                    ],
+                                                    ),
                                                   ),
                                                 ),
                                               );
@@ -199,7 +239,7 @@ class ProfileScreen extends StatelessWidget {
                                         },
                                         child: Icon(Icons.edit),
                                       ),
-                                    )
+                                    ),
                                   ],
                                 ),
                               ),
@@ -224,7 +264,8 @@ class ProfileScreen extends StatelessWidget {
                               decoration: BoxDecoration(
                                 color: Colors.white,
                                 borderRadius: BorderRadius.vertical(
-                                    top: Radius.circular(25)),
+                                  top: Radius.circular(25),
+                                ),
                               ),
                               child: Padding(
                                 padding: const EdgeInsets.all(16),
@@ -243,7 +284,7 @@ class ProfileScreen extends StatelessWidget {
                                         onPressed: () {},
                                         child: Icon(Icons.edit),
                                       ),
-                                    )
+                                    ),
                                   ],
                                 ),
                               ),
