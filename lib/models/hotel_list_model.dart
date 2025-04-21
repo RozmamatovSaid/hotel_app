@@ -1,17 +1,19 @@
 class Hotel {
   final String id;
   final String name;
+  final String address;
   final String description;
   final List<String> facilities;
   final List<String> image;
   final int price;
-  final int rating;
+  double rating;
   final List<String> type;
   final List<Review> reviews;
 
   Hotel({
     required this.id,
     required this.name,
+    required this.address,
     required this.description,
     required this.facilities,
     required this.image,
@@ -25,11 +27,12 @@ class Hotel {
     return Hotel(
       id: id,
       name: json['name'],
+      address: json['address'],
       description: json['description'],
       facilities: List<String>.from(json['facilities']),
       image: List<String>.from(json['image']),
       price: json['price'],
-      rating: (json['rating'] as num).toInt(),
+      rating: (json['rating'] as num).toDouble(),
       type: List<String>.from(json['type']),
       reviews:
           (json['review'] as Map<String, dynamic>?)?.values
@@ -42,15 +45,14 @@ class Hotel {
 
 class Review {
   final String comment;
-  final int rating;
+  final double rating;
 
   Review({required this.comment, required this.rating});
 
   factory Review.fromJson(Map<String, dynamic> json) {
-    return Review(comment: json['comment'], rating: json['rating']);
-  }
-
-  Map<String, dynamic> toJson() {
-    return {'comment': comment, 'rating': rating};
+    return Review(
+      comment: json['comment'],
+      rating: (json['rating'] as num).toDouble(),
+    );
   }
 }

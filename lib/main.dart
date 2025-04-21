@@ -1,6 +1,5 @@
 import 'package:flutter/material.dart';
-import 'package:hotel_app/views/hotel_lists/screens/hotel_list_screen.dart';
-import 'package:hotel_app/views/profile/screens/profile_screen.dart';
+import 'package:hotel_app/views/hotel_lists/screens/hotels_infos_screen.dart';
 
 void main() => runApp(MyApp());
 
@@ -19,7 +18,7 @@ class MyApp extends StatelessWidget {
           ),
         ),
       ),
-      home: HotelListScreen(),
+      home: HotelsInfosScreen(),
     );
   }
 }
