@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
+import 'package:hotel_app/datasources/hotel_lists_datasources.dart';
 import 'package:hotel_app/models/hotel_list_model.dart';
-import 'package:hotel_app/viewmodels/hotel_lists_viewmodel.dart';
 import 'package:hotel_app/views/hotel_lists/screens/this_hotel_infos_screen.dart';
 
 class HotelsInfosScreen extends StatefulWidget {
@@ -11,8 +11,9 @@ class HotelsInfosScreen extends StatefulWidget {
 }
 
 class _HotelsInfosScreenState extends State<HotelsInfosScreen> {
-  final HotelListsRemoteDatasource controller = HotelListsRemoteDatasource();
-  List<Hotel> hotels = [];
+  final HotelRemoteDatasource controller = HotelRemoteDatasource();
+
+  List<HotelModel> hotels = [];
   bool isLoading = true;
 
   @override
@@ -99,30 +100,15 @@ class _HotelsInfosScreenState extends State<HotelsInfosScreen> {
                                         ) {
                                           if (loadingProgress == null) {
                                             return child;
-                                          }
-
-                                          return Container(
-                                            color: Colors.grey[300],
-                                            child: Center(
-                                              child:
-                                                  CircularProgressIndicator(),
-                                            ),
-                                          );
-                                        },
-                                        errorBuilder: (
-                                          context,
-                                          error,
-                                          stackTrace,
-                                        ) {
-                                          return Container(
-                                            color: Colors.grey,
-                                            child: Center(
-                                              child: Icon(
-                                                Icons.broken_image,
-                                                size: 40,
+                                          } else {
+                                            return Container(
+                                              color: Colors.grey[300],
+                                              child: Center(
+                                                child:
+                                                    CircularProgressIndicator(),
                                               ),
-                                            ),
-                                          );
+                                            );
+                                          }
                                         },
                                       ),
                                     ),

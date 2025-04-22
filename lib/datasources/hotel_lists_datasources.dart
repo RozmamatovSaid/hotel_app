@@ -1,32 +1,33 @@
 import 'dart:convert';
-import 'package:hotel_app/models/hotel_list_model.dart';
 import 'package:http/http.dart' as http;
-import 'package:shared_preferences/shared_preferences.dart';
+import 'package:hotel_app/models/hotel_list_model.dart';
 
-class HotelListsRemoteDatasource {
-  List<Hotel> hotels = [];
+class HotelRemoteDatasource {
+  List<HotelModel> _hotels = [];
 
-  Future<void> fetchHotels() async {
+  Future<List<HotelModel>> fetchHotels() async {
     final url = Uri.parse(
       'https://e-commerce-d13dc-default-rtdb.firebaseio.com/hotel/admin/hotels.json',
     );
     final response = await http.get(url);
     final data = json.decode(response.body) as Map<String, dynamic>;
 
-    hotels =
+    _hotels =
         data.entries.map((entry) {
           final hotelId = entry.key;
           final hotelData = entry.value;
-          return Hotel.fromJson(hotelData, hotelId);
+          return HotelModel.fromJson(hotelData, hotelId);
         }).toList();
+
+    return _hotels;
   }
 
-  List<Hotel> getAllHotels() {
-    return hotels;
+  List<HotelModel> getAllHotels() {
+    return _hotels;
   }
 
-  Hotel getHotel(int index) {
-    return hotels[index];
+  HotelModel getHotel(int index) {
+    return _hotels[index];
   }
 
   Future<void> addReview(String hotelId, String comment, double rating) async {
@@ -64,21 +65,4 @@ class HotelListsRemoteDatasource {
       await http.put(ratingUrl, body: json.encode(averageRating));
     }
   }
-}
-
-//! Shared Preferences
-Future<Map<String, bool>> loadReviewStatus() async {
-  final prefs = await SharedPreferences.getInstance();
-  final keys = prefs.getKeys();
-
-  Map<String, bool> reviewedHotels = {
-    for (var key in keys) key: prefs.getBool(key) ?? false,
-  };
-
-  return reviewedHotels;
-}
-
-Future<void> markHotelAsReviewed(String hotelId) async {
-  final prefs = await SharedPreferences.getInstance();
-  await prefs.setBool(hotelId, true);
 }

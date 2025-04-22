@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:hotel_app/views/hotel_lists/screens/hotels_infos_screen.dart';
+import 'package:hotel_app/views/hotel_lists/screens/register_screens/sign_up_screen.dart';
 
 void main() => runApp(MyApp());
 

@@ -1,12 +1,12 @@
 import 'package:flutter/material.dart';
+import 'package:hotel_app/datasources/hotel_lists_datasources.dart';
 import 'package:hotel_app/models/hotel_list_model.dart';
-import 'package:hotel_app/viewmodels/hotel_lists_viewmodel.dart';
 import 'package:hotel_app/views/hotel_lists/screens/hotels_infos_screen.dart';
 import 'package:hotel_app/views/profile/extension/space_extension.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 
 class HotelListScreen extends StatefulWidget {
-  final Hotel hotel;
+  final HotelModel hotel;
 
   const HotelListScreen({super.key, required this.hotel});
 
@@ -15,16 +15,16 @@ class HotelListScreen extends StatefulWidget {
 }
 
 class _HotelListScreenState extends State<HotelListScreen> {
-  final HotelListsRemoteDatasource controller = HotelListsRemoteDatasource();
+  final HotelRemoteDatasource controller = HotelRemoteDatasource();
   final TextEditingController commentController = TextEditingController();
 
-  Map<String, bool> reviewedHotels = {};
+  Map<String, bool> reviewHotels = {};
   double chooseRating = 0;
 
   @override
   void initState() {
     super.initState();
-    controller.fetchHotels().then((_) {
+    controller.fetchHotels().then((ctx) {
       setState(() {});
     });
     loadReviewStatus();
@@ -40,7 +40,7 @@ class _HotelListScreenState extends State<HotelListScreen> {
     final reviewed = prefs.getBool('reviewed_${widget.hotel.id}') ?? false;
 
     setState(() {
-      reviewedHotels[widget.hotel.id] = reviewed;
+      reviewHotels[widget.hotel.id] = reviewed;
     });
   }
 
@@ -53,7 +53,7 @@ class _HotelListScreenState extends State<HotelListScreen> {
   @override
   Widget build(BuildContext context) {
     final hotel = widget.hotel;
-    final hasReviewed = reviewedHotels[hotel.id] ?? false;
+    final hasReviewed = reviewHotels[hotel.id] ?? false;
 
     return Scaffold(
       backgroundColor: Colors.white,
@@ -93,14 +93,6 @@ class _HotelListScreenState extends State<HotelListScreen> {
                           return Container(
                             color: Colors.grey[300],
                             child: Center(child: CircularProgressIndicator()),
-                          );
-                        },
-                        errorBuilder: (context, error, stackTrace) {
-                          return Container(
-                            color: Colors.grey,
-                            child: Center(
-                              child: Icon(Icons.broken_image, size: 40),
-                            ),
                           );
                         },
                       ),
@@ -159,9 +151,9 @@ class _HotelListScreenState extends State<HotelListScreen> {
                         children:
                             hotel.facilities
                                 .map(
-                                  (f) => Chip(
-                                    backgroundColor: Colors.blue.shade50,
-                                    label: Text(f),
+                                  (inx) => Chip(
+                                    backgroundColor: Colors.blue,
+                                    label: Text(inx),
                                   ),
                                 )
                                 .toList(),
@@ -187,15 +179,15 @@ class _HotelListScreenState extends State<HotelListScreen> {
                       ),
                       Column(
                         children:
-                            hotel.reviews.map((r) {
+                            hotel.reviews.map((review) {
                               return ListTile(
                                 contentPadding: EdgeInsets.zero,
-                                title: Text(r.comment),
+                                title: Text(review.comment),
                                 subtitle: Row(
                                   children: List.generate(5, (i) {
                                     final starValue = i + 1;
                                     return Icon(
-                                      r.rating >= starValue
+                                      review.rating >= starValue
                                           ? Icons.star
                                           : Icons.star_border,
                                       color: Colors.amber,
@@ -270,7 +262,7 @@ class _HotelListScreenState extends State<HotelListScreen> {
                                   hotel.reviews,
                                 );
 
-                                reviewedHotels[hotel.id] = true;
+                                reviewHotels[hotel.id] = true;
                                 commentController.clear();
                                 chooseRating = 0;
                               });

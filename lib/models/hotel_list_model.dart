@@ -1,4 +1,4 @@
-class Hotel {
+class HotelModel {
   final String id;
   final String name;
   final String address;
@@ -10,7 +10,7 @@ class Hotel {
   final List<String> type;
   final List<Review> reviews;
 
-  Hotel({
+  HotelModel({
     required this.id,
     required this.name,
     required this.address,
@@ -23,8 +23,8 @@ class Hotel {
     required this.reviews,
   });
 
-  factory Hotel.fromJson(Map<String, dynamic> json, String id) {
-    return Hotel(
+  factory HotelModel.fromJson(Map<String, dynamic> json, String id) {
+    return HotelModel(
       id: id,
       name: json['name'],
       address: json['address'],
