@@ -1,8 +1,12 @@
 import 'package:flutter/material.dart';
-import 'package:hotel_app/mehmonxona_royhatlari/views/screens/mehmonxona_royhatlar_screen.dart';
-import 'package:hotel_app/views/profile/screens/profile_screen.dart';
+import 'package:hotel_app/core/providers/providers.dart';
+import 'package:hotel_app/core/router/router.dart';
+import 'package:hotel_app/core/router/routes.dart';
+import 'package:provider/provider.dart';
 
-void main() => runApp(MyApp());
+void main() {
+  runApp(MultiProvider(providers: Providers.providers, child: MyApp()));
+}
 
 class MyApp extends StatelessWidget {
   const MyApp({super.key});
@@ -19,7 +23,8 @@ class MyApp extends StatelessWidget {
           ),
         ),
       ),
-      home: MehmonxonaRoyhatlarScreen(),
+      initialRoute: AppRoutes.searchScreen,
+      routes: AppRouter.appRoutes,
     );
   }
 }
