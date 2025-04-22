@@ -21,7 +21,6 @@ class ProfileViewmodel {
     print(e);
     print(c);
   }
-
   return user;
 }
 
