@@ -1,12 +1,11 @@
 import 'package:flutter/material.dart';
 import 'package:hotel_app/core/router/routes.dart';
-import 'package:hotel_app/views/booking/screens/booking_screen.dart';
-import 'package:hotel_app/views/hotel_lists/screens/categories_hotel.dart';
-import 'package:hotel_app/views/profile/screens/profile_screen.dart';
-import 'package:hotel_app/views/register_screens/login_in_screen.dart';
-import 'package:hotel_app/views/register_screens/sign_up_screen.dart';
-import 'package:hotel_app/views/search_and_filter/screens/search_screen.dart';
-import 'package:hotel_app/views/search_and_filter/screens/filter_screen.dart';
+import 'package:hotel_app/features/categories/presentation/views/screens/categories_hotel.dart';
+import 'package:hotel_app/features/profile/presentation/views/screens/profile_screen.dart';
+import 'package:hotel_app/features/auth/presentation/views/screens/login_in_screen.dart';
+import '../../features/auth/presentation/views/screens/sign_up_screen.dart';
+import '../../features/search/presentation/views/screens/filter_screen.dart';
+import '../../features/search/presentation/views/screens/search_screen.dart';
 
 class AppRouter {
   static final Map<String, WidgetBuilder> appRoutes = {
