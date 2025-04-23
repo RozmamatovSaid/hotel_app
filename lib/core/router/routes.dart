@@ -7,4 +7,9 @@ class AppRoutes {
   static const categories = "/categories";
   static const booking = "/booking";
   static const filter = "/filter";
+  static const categoryHotels = "/hotel-hotels";
+  static const categoryDetailHotel = "/category-detail-hotel";
+  static const signUp = "/sign-up";
+  static const forgotPassword = "/forgotPassword";
+  static const userEnterInfo = "/user-enter-info";
 }
