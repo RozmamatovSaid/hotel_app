@@ -48,22 +48,22 @@ class Screen extends StatelessWidget {
                           Text(user.login),
                         ],
                       ),
-                      IconButton(
-                        onPressed: () {
-                          if (AdaptiveTheme.of(context).mode ==
-                              AdaptiveThemeMode.light) {
-                            AdaptiveTheme.of(context).setDark();
-                          } else {
-                            AdaptiveTheme.of(context).setLight();
-                          }
-                        },
-                        icon: Icon(
-                          AdaptiveTheme.of(context).mode ==
-                                  AdaptiveThemeMode.light
-                              ? Icons.dark_mode
-                              : Icons.light_mode,
-                        ),
-                      ),
+                      // IconButton(
+                      //   onPressed: () {
+                      //     if (AdaptiveTheme.of(context).mode ==
+                      //         AdaptiveThemeMode.light) {
+                      //       AdaptiveTheme.of(context).setDark();
+                      //     } else {
+                      //       AdaptiveTheme.of(context).setLight();
+                      //     }
+                      //   },
+                      //   icon: Icon(
+                      //     AdaptiveTheme.of(context).mode ==
+                      //             AdaptiveThemeMode.light
+                      //         ? Icons.dark_mode
+                      //         : Icons.light_mode,
+                      //   ),
+                      // ),
                     ],
                   ),
                 ),
