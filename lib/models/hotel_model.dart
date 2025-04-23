@@ -1,79 +1,46 @@
-import 'review_model.dart';
+import 'package:hotel_app/models/review_model.dart';
 
 class HotelModel {
+  String? id;
+  final String name;
   final String address;
   final String description;
   final List<String> facilities;
   final List<String> image;
-  final String name;
   final int price;
-  final int rating;
-  final Map<String, ReviewModel> review;
+  double rating;
   final List<String> type;
+  final List<ReviewModel> reviews;
 
   HotelModel({
+    required this.id,
+    required this.name,
     required this.address,
     required this.description,
     required this.facilities,
     required this.image,
-    required this.name,
     required this.price,
     required this.rating,
-    required this.review,
     required this.type,
+    required this.reviews,
   });
 
-  factory HotelModel.fromJson(Map<String, dynamic> json) {
+  factory HotelModel.fromJson({required Map<String, dynamic> json, String? id}) {
     return HotelModel(
+      id: id,
+      name: json['name'],
       address: json['address'],
-      description: json['description'] ?? '',
-      facilities: List<String>.from(json['facilities'] ?? []),
-      image: List<String>.from(json['image'] ?? []),
-      name: json['name'] ?? '',
-      price: (json['price'] as num?)?.toInt() ?? 0,
-      rating: (json['rating'] as num?)?.toInt() ?? 0,
-      review: (json['review'] as Map<String, dynamic>? ?? {}).map(
-        (key, value) => MapEntry(key, ReviewModel.fromJson(value)),
-      ),
-      type: List<String>.from(json['type'] ?? []),
-    );
-  }
-
-  Map<String, dynamic> toJson() {
-    return {
-      'address': address,
-      'description': description,
-      'facilities': facilities,
-      'image': image,
-      'name': name,
-      'price': price,
-      'rating': rating,
-      'review': review.map((key, value) => MapEntry(key, value.toJson())),
-      'type': type,
-    };
-  }
-
-  HotelModel copyWith({
-    String? address,
-    String? description,
-    List<String>? facilities,
-    List<String>? image,
-    String? name,
-    int? price,
-    int? rating,
-    Map<String, ReviewModel>? review,
-    List<String>? type,
-  }) {
-    return HotelModel(
-      address: address ?? this.address,
-      description: description ?? this.description,
-      facilities: facilities ?? this.facilities,
-      image: image ?? this.image,
-      name: name ?? this.name,
-      price: price ?? this.price,
-      rating: rating ?? this.rating,
-      review: review ?? this.review,
-      type: type ?? this.type,
+      description: json['description'],
+      facilities: List<String>.from(json['facilities']),
+      image: List<String>.from(json['image']),
+      price: json['price'],
+      rating: (json['rating'] as num).toDouble(),
+      type: List<String>.from(json['type']),
+      reviews:
+          (json['review'] as Map<String, dynamic>?)?.values
+              .map((e) => ReviewModel.fromJson(e))
+              .toList() ??
+          [],
     );
   }
 }

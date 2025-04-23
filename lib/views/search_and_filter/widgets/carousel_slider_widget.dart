@@ -11,16 +11,18 @@ class CarouselSliderWidget extends StatelessWidget {
     return CarouselSlider(
       options: CarouselOptions(
         autoPlay: true,
-        autoPlayInterval: Duration(seconds: 3),
-        autoPlayCurve: Curves.ease,
+        autoPlayAnimationDuration: Duration(seconds: 3),
+        enlargeStrategy: CenterPageEnlargeStrategy.height,
+        // autoPlayInterval: Duration(seconds: 5),
+        autoPlayCurve: Curves.fastOutSlowIn,
+        // aspectRatio: 2,
       ),
       items:
           imageList.map((url) {
             return Builder(
               builder:
                   (context) => ClipRRect(
-                    borderRadius: BorderRadius.circular(5),
-                    child: CachedNetworkImage(imageUrl: url),
+                    child: CachedNetworkImage(imageUrl: url, fit: BoxFit.cover),
                   ),
             );
           }).toList(),

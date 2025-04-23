@@ -10,7 +10,7 @@ class FilterViewmodel extends ChangeNotifier {
   // double minPrice = 0;
   // double maxPrice = 0;
 
-  int selectRating = 0;
+  double selectRating = 0;
 
   bool wf = false;
   bool tv = false;
@@ -41,7 +41,7 @@ class FilterViewmodel extends ChangeNotifier {
     notifyListeners();
   }
 
-  void setSelectRating(int newRating) {
+  void setSelectRating(double newRating) {
     if (selectRating == newRating) {
       selectRating = 0;
     } else {

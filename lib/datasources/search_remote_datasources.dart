@@ -19,7 +19,7 @@ class SearchRemoteDatasource {
       final Map<String, dynamic> data = response.data;
 
       data.forEach((key, value) {
-        hotels.add(HotelModel.fromJson(value));
+        hotels.add(HotelModel.fromJson(json: value));
         // print("1111111111${hotels}");
       });
     } catch (e, c) {

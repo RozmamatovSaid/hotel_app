@@ -1,5 +1,5 @@
 import 'package:flutter/material.dart';
-import 'package:hotel_app/datasources/search_datasource/search_remote_datasource.dart';
+import 'package:hotel_app/datasources/search_remote_datasources.dart';
 import 'package:hotel_app/models/hotel_model.dart';
 
 class SearchViewmodel with ChangeNotifier {

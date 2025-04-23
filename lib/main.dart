@@ -23,7 +23,7 @@ class MyApp extends StatelessWidget {
           ),
         ),
       ),
-      initialRoute: AppRoutes.searchScreen,
+      initialRoute: AppRoutes.login,
       routes: AppRouter.appRoutes,
     );
   }

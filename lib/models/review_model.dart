@@ -1,18 +1,16 @@
+
 class ReviewModel {
   final String comment;
-  final int rating;
+  final double rating;
 
-  ReviewModel({
-    required this.comment,
-    required this.rating,
-  });
+  ReviewModel({required this.comment, required this.rating});
 
-factory ReviewModel.fromJson(Map<String, dynamic> json) {
-  return ReviewModel(
-    comment: json['comment'] ?? '',
-    rating: (json['rating'] as num?)?.toInt() ?? 0,
-  );
-}
+  factory ReviewModel.fromJson(Map<String, dynamic> json) {
+    return ReviewModel(
+      comment: json['comment'],
+      rating: (json['rating'] as num).toDouble(),
+    );
+  }
 
 
   Map<String, dynamic> toJson() {
@@ -24,7 +22,7 @@ factory ReviewModel.fromJson(Map<String, dynamic> json) {
 
   ReviewModel copyWith({
     String? comment,
-    int? rating,
+    double? rating,
   }) {
     return ReviewModel(
       comment: comment ?? this.comment,
